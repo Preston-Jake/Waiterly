@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,10 +20,7 @@ namespace Waiterly.Models
 
         public int WageId { get; set; }
 
+        [NotMapped]
         public Wage Wage { get; set; }
-
-        public int UserTypeId { get; set; }
-
-        public UserType UserType { get; set; }
     }
 }
