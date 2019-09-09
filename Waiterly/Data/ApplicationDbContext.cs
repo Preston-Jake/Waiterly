@@ -10,6 +10,10 @@ namespace Waiterly.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {
+        public ApplicationDbContext()
+        {
+        }
+
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {}
@@ -25,6 +29,7 @@ namespace Waiterly.Data
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
             ApplicationUser user = new ApplicationUser
             {
                 FirstName = "admin",
