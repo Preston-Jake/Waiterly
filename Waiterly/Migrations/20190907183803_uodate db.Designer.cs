@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Waiterly.Data;
 
 namespace Waiterly.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190907183803_uodate db")]
+    partial class uodatedb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -189,6 +191,27 @@ namespace Waiterly.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("Waiterly.Models.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Type")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Type = "TestFood"
+                        });
+                });
+
             modelBuilder.Entity("Waiterly.Models.Restaurant", b =>
                 {
                     b.Property<int>("Id")
@@ -197,6 +220,8 @@ namespace Waiterly.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired();
+
+                    b.Property<int>("CategoryId");
 
                     b.Property<string>("Name")
                         .IsRequired();
@@ -213,6 +238,7 @@ namespace Waiterly.Migrations
                         {
                             Id = 1,
                             Address = "111 Test Address",
+                            CategoryId = 1,
                             Name = "TestRestaurant",
                             Phone = "16155120998"
                         });
@@ -340,13 +366,13 @@ namespace Waiterly.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "aae7bac8-6adb-4536-b79a-9c4b565cbe1a",
+                            ConcurrencyStamp = "cf813189-c41c-4f68-a18c-13cf2a3263df",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAEJSZvxkqAW5Xd/PSruvHdbTvt6rWWpJSuD1pJOgGoD0U23oD8gtkGbUTZQhV1qDJgw==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPtSNhfcshHiTMor01pmVaWEIyFBcalmm+zPOTnUBvE3B+A1nWeNsr0Cgbk1hABHrQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,

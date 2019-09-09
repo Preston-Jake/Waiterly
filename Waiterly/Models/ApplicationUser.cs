@@ -18,6 +18,13 @@ namespace Waiterly.Models
         [Display(Name="Last Name")]
         public string LastName { get; set; }
 
+        [Required]
+        [Display(Name = "Restaurant")]
+        public int RestaurantId { get; set; }
+
+        [NotMapped]
+        public Restaurant Restaurant { get; set; }
+       
         public int WageId { get; set; }
 
         [NotMapped]

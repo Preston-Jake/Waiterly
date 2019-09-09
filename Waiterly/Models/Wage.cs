@@ -16,6 +16,7 @@ namespace Waiterly.Models
         public double Dollars { get; set; }
         [Required]
         public double Hours { get; set; }
+        
 
     }
 }
