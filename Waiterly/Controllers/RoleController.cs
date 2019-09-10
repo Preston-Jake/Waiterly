@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core_RBS.Controllers
 {
-    [Authorize (Roles = "Admin")]
+    [Authorize (Roles = "Admin, Manager")]
     public class RoleController : Controller
     {
         RoleManager<IdentityRole> roleManager;
@@ -20,17 +20,20 @@ namespace Core_RBS.Controllers
             this.roleManager = roleManager;
         }
 
+        [Authorize(Roles = "Admin, Manager")]
         public IActionResult Index()
         {
             var roles = roleManager.Roles.ToList();
             return View(roles);
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View(new IdentityRole());
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(IdentityRole role)
         {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,16 +11,18 @@ using Waiterly.Models;
 
 namespace Waiterly.Controllers
 {
+    [Authorize(Roles = "Admin, Manager, Waiter, Host")]
     public class UserTablesController : Controller
     {
         private readonly ApplicationDbContext _context;
-
+         
         public UserTablesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
         // GET: UserTables
+
         public async Task<IActionResult> Index()
         {
             return View(await _context.UserTables.ToListAsync());
@@ -44,6 +47,7 @@ namespace Waiterly.Controllers
         }
 
         // GET: UserTables/Create
+        [Authorize(Roles = "Admin, Manager, Host")]
         public IActionResult Create()
         {
             return View();
@@ -52,6 +56,7 @@ namespace Waiterly.Controllers
         // POST: UserTables/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Manager, Host")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,UserId,TableId")] UserTable userTable)
@@ -66,6 +71,7 @@ namespace Waiterly.Controllers
         }
 
         // GET: UserTables/Edit/5
+        [Authorize(Roles = "Admin, Manager, Host")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,6 +90,7 @@ namespace Waiterly.Controllers
         // POST: UserTables/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Manager, Host")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,TableId")] UserTable userTable)
@@ -117,6 +124,7 @@ namespace Waiterly.Controllers
         }
 
         // GET: UserTables/Delete/5
+        [Authorize(Roles = "Admin, Manager, Host")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,6 +143,7 @@ namespace Waiterly.Controllers
         }
 
         // POST: UserTables/Delete/5
+        [Authorize(Roles = "Admin, Manager, Host")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
