@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -20,12 +21,14 @@ namespace Waiterly.Controllers
         }
 
         // GET: Wages
+        [Authorize(Roles = "Admin, Manager, Waiter, Host")]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Wages.ToListAsync());
         }
 
         // GET: Wages/Details/5
+        [Authorize(Roles = "Admin, Manager, Waiter, Host")]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,6 +47,8 @@ namespace Waiterly.Controllers
         }
 
         // GET: Wages/Create
+        [Authorize(Roles = "Admin, Manager" )]
+        
         public IActionResult Create()
         {
             return View();
@@ -54,6 +59,7 @@ namespace Waiterly.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create([Bind("Id,UserId,Dollars,Hours")] Wage wage)
         {
             if (ModelState.IsValid)
@@ -66,6 +72,7 @@ namespace Waiterly.Controllers
         }
 
         // GET: Wages/Edit/5
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,6 +91,7 @@ namespace Waiterly.Controllers
         // POST: Wages/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,Dollars,Hours")] Wage wage)
@@ -117,6 +125,7 @@ namespace Waiterly.Controllers
         }
 
         // GET: Wages/Delete/5
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,6 +144,7 @@ namespace Waiterly.Controllers
         }
 
         // POST: Wages/Delete/5
+        [Authorize(Roles = "Admin, Manager")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
