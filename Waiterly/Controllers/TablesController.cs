@@ -23,7 +23,10 @@ namespace Waiterly.Controllers
             _context = context;
             _userManager = userManager;
         }
-
+        private Task<ApplicationUser> GetUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
+        }
         // GET: Tables
         public async Task<IActionResult> Index()
         {
@@ -51,9 +54,12 @@ namespace Waiterly.Controllers
         }
 
         // GET: Tables/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["Restaurants"] = new SelectList(_context.Restaurants.Where(), "Id", "Name");
+            //return the restautants where the login user has an id on rUser
+            var user = await GetUserAsync();
+            var rUsers = _context.RestaurantUsers;
+            ViewData["Restaurants"] = new SelectList(_context.Restaurants, "Id", "Name");
             return View();
         }
 

@@ -27,6 +27,7 @@ namespace Waiterly.Controllers
         {
             return View(await _context.UserTables
                 .Include(u => u.User)
+                .Include(u => u.Table)
                 .ToListAsync());
         }
 
@@ -52,6 +53,8 @@ namespace Waiterly.Controllers
         [Authorize(Roles = "Admin, Manager, Host")]
         public IActionResult Create()
         {
+            ViewData["Users"] = new SelectList(_context.ApplicationUsers, "Id", "FullName");
+            ViewData["Tables"] = new SelectList(_context.Tables, "Id", "TableNumber");
             return View();
         }
 
