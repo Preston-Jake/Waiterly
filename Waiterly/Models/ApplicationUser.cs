@@ -11,23 +11,18 @@ namespace Waiterly.Models
     public class ApplicationUser : IdentityUser
     {
         [Required]
-        [Display(Name="First Name")]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
         [Required]
-        [Display(Name="Last Name")]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Required]
-        [Display(Name = "Restaurant")]
-        public int RestaurantId { get; set; }
-
         [NotMapped]
-        public Restaurant Restaurant { get; set; }
-       
-        public int WageId { get; set; }
+        public string FullName => $"{FirstName} {LastName}";
 
-        [NotMapped]
+        [ForeignKey(name: "Wage")]
+        public int? WageId { get; set; } = null;
         public Wage Wage { get; set; }
     }
 }

@@ -1,14 +1,20 @@
 ﻿@model IEnumerable<Waiterly.Models.Restaurant>
 
+
+
+<h1>Restaurants</h1>
 @{
-    ViewData["Title"] = "Index";
-}
+    if (User.Identity.IsAuthenticated)
+    {
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
+        if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+        {
+            <p>
+    <a asp-action="Create">Add Restaurant</a>
 </p>
+        }
+    }
+}
 <table class="table">
     <thead>
         <tr>
@@ -25,23 +31,47 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Phone)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Address)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Phone)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @{
+            if (User.Identity.IsAuthenticated)
+            {
+
+                if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                {
+                                <p>
+                                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                                </p>
+                }
+            }
+                    }
+                    @{
+            if (User.Identity.IsAuthenticated)
+            {
+
+                if (User.IsInRole("Host") || User.IsInRole("Waiter"))
+                {
+                                <p>
+                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                </p>
+                    }
+                }
+            }
+                    </td>
+            </tr>
+        }
     </tbody>
 </table>

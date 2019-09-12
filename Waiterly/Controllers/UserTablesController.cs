@@ -25,7 +25,9 @@ namespace Waiterly.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.UserTables.ToListAsync());
+            return View(await _context.UserTables
+                .Include(u => u.User)
+                .ToListAsync());
         }
 
         // GET: UserTables/Details/5

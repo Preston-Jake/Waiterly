@@ -11,13 +11,13 @@ namespace Waiterly.Models
     {
         [Required]
         public int Id { get; set; }
+
         [Required]
         public string UserId { get; set; }
+        public ApplicationUser User { get; set; }
+
         [Required]
         public int TableId { get; set; }
-        [NotMapped]
-        public ApplicationUser User { get; set; }
-        [NotMapped]
         public Table Table { get; set; }
     }
 }

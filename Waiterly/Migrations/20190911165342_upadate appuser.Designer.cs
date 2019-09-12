@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Waiterly.Data;
 
 namespace Waiterly.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190911165342_upadate appuser")]
+    partial class upadateappuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -204,11 +206,7 @@ namespace Waiterly.Migrations
                     b.Property<string>("Phone")
                         .IsRequired();
 
-                    b.Property<int?>("RestaurantUserId");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("RestaurantUserId");
 
                     b.ToTable("Restaurants");
 
@@ -343,11 +341,9 @@ namespace Waiterly.Migrations
                     b.Property<string>("LastName")
                         .IsRequired();
 
-                    b.Property<int?>("RestaurantUserId");
+                    b.Property<int>("RestaurantId");
 
                     b.Property<int?>("WageId");
-
-                    b.HasIndex("RestaurantUserId");
 
                     b.HasIndex("WageId")
                         .IsUnique()
@@ -360,19 +356,20 @@ namespace Waiterly.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c06d69f4-c9bc-41b2-b1ac-febe6a6d648f",
+                            ConcurrencyStamp = "12a12388-1aa8-450f-9d6e-148db5883e9c",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAECaoA1yzGG3VxXoAGcAuoYEJ38fLlv1BRsEijk2DOAy143Fcsu7vz9l4JaXgZ8Bh0w==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMLuw3VF5aPzaikGpHVfhxCOsXNgTLo8P2m4j/kZSxUZhNqSPHM2iCMntQmfhlSsng==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com",
                             FirstName = "admin",
                             LastName = "admin",
+                            RestaurantId = 1,
                             WageId = 1
                         });
                 });
@@ -422,13 +419,6 @@ namespace Waiterly.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("Waiterly.Models.Restaurant", b =>
-                {
-                    b.HasOne("Waiterly.Models.RestaurantUser")
-                        .WithMany("Restaurants")
-                        .HasForeignKey("RestaurantUserId");
-                });
-
             modelBuilder.Entity("Waiterly.Models.RestaurantUser", b =>
                 {
                     b.HasOne("Waiterly.Models.Restaurant", "Restaurant")
@@ -465,10 +455,6 @@ namespace Waiterly.Migrations
 
             modelBuilder.Entity("Waiterly.Models.ApplicationUser", b =>
                 {
-                    b.HasOne("Waiterly.Models.RestaurantUser")
-                        .WithMany("Users")
-                        .HasForeignKey("RestaurantUserId");
-
                     b.HasOne("Waiterly.Models.Wage", "Wage")
                         .WithOne("User")
                         .HasForeignKey("Waiterly.Models.ApplicationUser", "WageId");

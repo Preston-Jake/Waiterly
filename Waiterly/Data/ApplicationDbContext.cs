@@ -34,7 +34,6 @@ namespace Waiterly.Data
             {
                 FirstName = "admin",
                 LastName = "admin",
-                RestaurantId = 1,
                 WageId = 1,
                 UserName = "admin@admin.com",
                 NormalizedUserName = "ADMIN@ADMIN.COM",

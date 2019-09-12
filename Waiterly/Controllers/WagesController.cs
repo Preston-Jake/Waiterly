@@ -24,7 +24,9 @@ namespace Waiterly.Controllers
         [Authorize(Roles = "Admin, Manager, Waiter, Host")]
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Wages.ToListAsync());
+            return View(await _context.Wages
+                .Include(w => w.User)
+                .ToListAsync());
         }
 
         // GET: Wages/Details/5
@@ -37,6 +39,7 @@ namespace Waiterly.Controllers
             }
 
             var wage = await _context.Wages
+                .Include(w => w.User)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (wage == null)
             {

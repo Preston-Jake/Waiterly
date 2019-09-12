@@ -17,7 +17,6 @@ namespace Waiterly.Models
         public int Seats { get; set; }
         [Required]
         public int RestaurantId { get; set; }
-        [NotMapped]
         public Restaurant Restaurant { get; set; }
     }
 }
