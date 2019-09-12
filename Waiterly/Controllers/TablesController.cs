@@ -24,7 +24,9 @@ namespace Waiterly.Controllers
         // GET: Tables
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Tables.ToListAsync());
+            return View(await _context.Tables
+                .Include(t => t.Restaurant)
+                .ToListAsync());
         }
 
         // GET: Tables/Details/5
@@ -48,6 +50,7 @@ namespace Waiterly.Controllers
         // GET: Tables/Create
         public IActionResult Create()
         {
+            ViewData["Restaurants"] = new SelectList(_context.Restaurants, "Id", "Name");
             return View();
         }
 

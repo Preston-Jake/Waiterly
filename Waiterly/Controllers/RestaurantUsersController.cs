@@ -79,7 +79,7 @@ namespace Waiterly.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,RestaurantId")] RestaurantUser restaurantUser)
+        public async Task<IActionResult> Create([Bind("Id,RestaurantId")] RestaurantUser restaurantUser)
         {
             ModelState.Remove("UserId");
             if (ModelState.IsValid)
@@ -91,7 +91,6 @@ namespace Waiterly.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["RestaurantId"] = new SelectList(_context.Restaurants, "Id", "RestaurantId", restaurantUser.RestaurantId);
-            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", restaurantUser.UserId);
             return View(restaurantUser);
         }
 
