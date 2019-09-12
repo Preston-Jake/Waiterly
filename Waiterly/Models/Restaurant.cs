@@ -10,6 +10,7 @@ namespace Waiterly.Models
     public class Restaurant
     {
         [Required]
+        [Key]
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }

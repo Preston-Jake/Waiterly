@@ -13,15 +13,17 @@ namespace Waiterly.Models
         public int Id { get; set; }
 
         [Required]
+        [Display(Name = "Employee")]
         public string UserId { get; set; }
-
-        [Required]
-        public int RestaurantId { get; set; }
-
-        [NotMapped]
         public ApplicationUser User { get; set; }
 
-        [NotMapped]
+        [Required]
+        [Display(Name = "Restaurant Name")]
+        public int RestaurantId { get; set; }
         public Restaurant Restaurant { get; set; }
+
+        public ICollection<Restaurant> Restaurants { get; set; }
+        public ICollection<ApplicationUser> Users { get; set; }
+
     }
 }
