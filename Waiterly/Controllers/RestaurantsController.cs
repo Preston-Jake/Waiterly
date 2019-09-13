@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,18 +16,36 @@ namespace Waiterly.Controllers
     public class RestaurantsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RestaurantsController(ApplicationDbContext context)
+        public RestaurantsController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
+        }
+        private Task<ApplicationUser> GetUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
         }
 
         // GET: Restaurants
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Restaurants
-                .ToListAsync()
-                );
+            var user = await GetUserAsync();
+            var restaurantUser = _context.RestaurantUsers.Include(ru => ru.User).Where(ru => ru.UserId == user.Id).ToList();
+            var restaurant = _context.Restaurants.ToList();
+            var restaurantView = new List<Restaurant>();
+            foreach (var r in restaurant)
+            {
+            foreach (var rUser in restaurantUser)
+                {
+                    if (r.Id == rUser.RestaurantId)
+                    {
+                        restaurantView.Add(r);
+                    }
+                }
+            }
+            return View(restaurantView);
         }
 
         // GET: Restaurants/Details/5
