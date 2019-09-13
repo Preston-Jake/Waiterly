@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Waiterly.Models.UserTable>
+﻿@model Waiterly.ViewModels.UserTableViewModel.UserTableViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -7,35 +7,72 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Assign Table</a> |
+    <a asp-controller="Tables" asp-action="Create">Add Table</a>
+
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.UserId)
+                Waiter
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TableId)
+                Table #
             </th>
-            <th></th>
+            <th>
+                Seats
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TableId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
+        @*@foreach (var userTable in Model.UserTables)
+        {
+        @foreach (var table in Model.Tables)
+        {
+            if (userTable.TableId != table.Id)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => userTable.User.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => userTable.Table.TableNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => userTable.Table.Seats)
+                </td>
+
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="">Edit</a> |
+                    <a asp-action="Details" asp-route-id="">Details</a> |
+                    <a asp-action="Delete" asp-route-id="">Delete</a>
+                </td>
+            </tr>
+            }
+            else { 
+            <tr>
+                <td>
+                    
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => table.TableNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => table.Seats)
+                </td>
+
+
+                <td>
+                    <a asp-action="Edit" asp-route-id="">Edit</a> |
+                    <a asp-action="Details" asp-route-id="">Details</a> |
+                    <a asp-action="Delete" asp-route-id="">Delete</a>
+                </td>
+            </tr>
+                }
+            }
+        }*@
+
     </tbody>
 </table>

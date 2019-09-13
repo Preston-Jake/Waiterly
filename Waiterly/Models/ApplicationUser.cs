@@ -24,5 +24,7 @@ namespace Waiterly.Models
         [ForeignKey(name: "Wage")]
         public int? WageId { get; set; } = null;
         public Wage Wage { get; set; }
-    }
+        
+        
+}
 }

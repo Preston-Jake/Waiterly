@@ -35,15 +35,36 @@ namespace Waiterly.Controllers
         }
         // GET: RestaurantUsers
         // return a list of employees where the Login User Also Works
+        
+
         public async Task<IActionResult> Index()
         {
             var user = await GetUserAsync();
+            var LoginUserRIds = await _context.RestaurantUsers
+                .Where(ru => ru.UserId == user.Id).Select(ru => ru.RestaurantId).ToListAsync();
 
-            return View(await _context.RestaurantUsers
-                .Include(ru => ru.Restaurant)
+            var restaurantUsers = await _context.RestaurantUsers
                 .Include(ru => ru.User)
-                .Where(ru => ru.UserId == user.Id)
-                .ToListAsync()); 
+                .Include(ru => ru.Restaurant)
+                .ToListAsync();
+            var rUserList = new List<RestaurantUser>();
+            foreach (var u in restaurantUsers)
+            {
+                foreach (var r in LoginUserRIds)
+                {
+                    if (r == u.RestaurantId)
+                    {
+                        rUserList.Add(u);
+                    }
+                }
+            }
+
+            //var movies = _db.Movies.Where(p => p.Genres.Intersect(listOfGenres).Any());
+            //var movies = _db.Movies.Where(p => p.Genres.Any(x => listOfGenres.Contains(x));
+            // where the restauarant user == login user returns a list of rUsers [{rid 1 }]
+            //                                                                   [{id 1 rid 1 userid 1} , {id 2 rid 1 userid 2 }]
+            // return all users where the are the samee same ru.id 
+            return View(rUserList); 
         }
  
         // GET: RestaurantUsers/Details/5

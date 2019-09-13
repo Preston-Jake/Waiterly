@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -15,12 +16,17 @@ namespace Waiterly.Controllers
     public class TablesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public TablesController(ApplicationDbContext context)
+        public TablesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
-
+        private Task<ApplicationUser> GetUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
+        }
         // GET: Tables
         public async Task<IActionResult> Index()
         {
@@ -48,8 +54,11 @@ namespace Waiterly.Controllers
         }
 
         // GET: Tables/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            //return the restautants where the login user has an id on rUser
+            var user = await GetUserAsync();
+            var rUsers = _context.RestaurantUsers;
             ViewData["Restaurants"] = new SelectList(_context.Restaurants, "Id", "Name");
             return View();
         }

@@ -50,27 +50,33 @@
 
                 if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                 {
-                                <p>
-                                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                                </p>
-                }
-            }
-                    }
-                    @{
-            if (User.Identity.IsAuthenticated)
-            {
+                                        <p>
+                                            <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-info">Edit</button></a>
+                                            
+                                            <a asp-controller="Delete" asp-route-id="@item.Id" >
+                                                <button type="button" class="btn btn-danger">Delete</button>
+                                            </a>
+                                            <a asp-controller="UserTables" asp-action="index">
+                                                <button type="button" class="btn btn-primary">Manage</button>
+                                            </a>
+                                        </p>
 
-                if (User.IsInRole("Host") || User.IsInRole("Waiter"))
-                {
-                                <p>
-                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                </p>
-                    }
-                }
-            }
-                    </td>
+                                            }
+                                            }
+                                            }
+                                            @{
+                                                if (User.Identity.IsAuthenticated)
+                                                {
+
+                                                    if (User.IsInRole("Host") || User.IsInRole("Waiter"))
+                                                    {
+                                                        <p>
+                                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                                        </p>
+                                                    }
+                                                }
+                                            }
+</td>
             </tr>
         }
     </tbody>
