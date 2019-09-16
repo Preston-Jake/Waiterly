@@ -32,5 +32,9 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Index">Back to List</a>
+    @{
+        var restaurantId = ViewContext.RouteData.Values["restaurantId"];
+    }
+    <a asp-action="Index" asp-route-restaurantId="@restaurantId">Back to List</a>
+
 </div>

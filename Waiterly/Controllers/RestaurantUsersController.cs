@@ -35,42 +35,29 @@ namespace Waiterly.Controllers
         }
         // GET: RestaurantUsers
         // return a list of employees where the Login User Also Works
-        
 
-        public async Task<IActionResult> Index()
+        [Route("Restaurants/{restaurantId}/Employees")]
+        
+        public async Task<IActionResult> Index(int? restaurantId)
         {
             var user = await GetUserAsync();
-            var LoginUserRIds = await _context.RestaurantUsers
-                .Where(ru => ru.UserId == user.Id).Select(ru => ru.RestaurantId).ToListAsync();
+            
 
             var restaurantUsers = await _context.RestaurantUsers
                 .Include(ru => ru.User)
                 .Include(ru => ru.Restaurant)
+                .Where(ru => ru.RestaurantId == restaurantId )
                 .ToListAsync();
-            var rUserList = new List<RestaurantUser>();
-            foreach (var u in restaurantUsers)
-            {
-                foreach (var r in LoginUserRIds)
-                {
-                    if (r == u.RestaurantId)
-                    {
-                        rUserList.Add(u);
-                    }
-                }
-            }
-
-            //var movies = _db.Movies.Where(p => p.Genres.Intersect(listOfGenres).Any());
-            //var movies = _db.Movies.Where(p => p.Genres.Any(x => listOfGenres.Contains(x));
-            // where the restauarant user == login user returns a list of rUsers [{rid 1 }]
-            //                                                                   [{id 1 rid 1 userid 1} , {id 2 rid 1 userid 2 }]
-            // return all users where the are the samee same ru.id 
-            return View(rUserList); 
+            
+            return View(restaurantUsers); 
         }
- 
+
         // GET: RestaurantUsers/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [Route("Restaurants/{restaurantId}/Employees/{employeeId}/Details")]
+
+        public async Task<IActionResult> Details(int restaurantId ,int? employeeId)
         {
-            if (id == null)
+            if (employeeId == null)
             {
                 return NotFound();
             }
@@ -78,7 +65,7 @@ namespace Waiterly.Controllers
             var restaurantUser = await _context.RestaurantUsers
                 .Include(ru => ru.Restaurant)
                 .Include(ru => ru.User)
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == employeeId);
             if (restaurantUser == null)
             {
                 return NotFound();
@@ -88,7 +75,9 @@ namespace Waiterly.Controllers
         }
 
         // GET: RestaurantUsers/Create
-        public async Task<IActionResult> Create()
+        
+        [Route("Restaurants/Employees/Create")]
+        public async Task<IActionResult> Create(int? restaurantId)
         {
             var restaurants = await _context.Restaurants.ToListAsync();
             ViewData["Restaurants"] = new SelectList(_context.Restaurants, "Id", "Name");
@@ -98,8 +87,10 @@ namespace Waiterly.Controllers
         // POST: RestaurantUsers/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Route("Restaurants/Employees/Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
+        
         public async Task<IActionResult> Create([Bind("Id,RestaurantId")] RestaurantUser restaurantUser)
         {
             ModelState.Remove("UserId");
@@ -109,22 +100,25 @@ namespace Waiterly.Controllers
                 restaurantUser.UserId = user.Id;
                 _context.Add(restaurantUser);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Restaurants");
+
             }
             ViewData["RestaurantId"] = new SelectList(_context.Restaurants, "Id", "RestaurantId", restaurantUser.RestaurantId);
             return View(restaurantUser);
         }
 
         // GET: RestaurantUsers/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [Route("Restaurants/{restaurantId}/Employees/{employeeId}/Delete")]
+
+        public async Task<IActionResult> Delete(int restaurantId , int? employeeId)
         {
-            if (id == null)
+            if (employeeId == null)
             {
                 return NotFound();
             }
 
             var restaurantUser = await _context.RestaurantUsers
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .FirstOrDefaultAsync(m => m.Id == employeeId);
             if (restaurantUser == null)
             {
                 return NotFound();
@@ -136,12 +130,14 @@ namespace Waiterly.Controllers
         // POST: RestaurantUsers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Route("Restaurants/{restaurantId}/Employees/{employeeId}/Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var restaurantUser = await _context.RestaurantUsers.FindAsync(id);
             _context.RestaurantUsers.Remove(restaurantUser);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var routeId = RouteData.Values["restaurantId"].ToString();
+            return RedirectToAction("Index", new { restaurantId = routeId });
         }
 
         private bool RestaurantUserExists(int id)
