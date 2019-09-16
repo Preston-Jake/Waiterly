@@ -80,8 +80,8 @@ namespace Waiterly.Controllers
                 }
             }
 
-            ViewData["RestaurantId"] = new SelectList(_context.Restaurants.Where(r => r.Id == restaurantId), "Id", "Name");
             ViewData["UserId"] = new SelectList(employees, "Id", "FullName");
+            ViewData["RestaurantId"] = new SelectList(_context.Restaurants.Where(r => r.Id == restaurantId), "Id", "Name");
             return View();
         }
 
@@ -97,7 +97,8 @@ namespace Waiterly.Controllers
             {
                 _context.Add(userTable);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Index", new { restaurantId = userTable.RestaurantId });
+                var routeId = RouteData.Values["restaurantId"].ToString();
+                return RedirectToAction("Index", new { restaurantId = routeId });
             }
             ViewData["RestaurantId"] = new SelectList(_context.Restaurants, "Id", "Address", userTable.RestaurantId);
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", userTable.UserId);
@@ -127,8 +128,8 @@ namespace Waiterly.Controllers
                     employees.Add(u.User);
                 }
             }
-            ViewData["RestaurantId"] = new SelectList(_context.Restaurants.Where(r => r.Id == restaurantId), "Id", "Name");
             ViewData["UserId"] = new SelectList(employees, "Id", "FullName");
+            ViewData["RestaurantId"] = new SelectList(_context.Restaurants.Where(r => r.Id == restaurantId), "Id", "Name");
             return View(userTable);
         }
 

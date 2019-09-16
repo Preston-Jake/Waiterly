@@ -21,9 +21,7 @@ namespace Waiterly.Models
         [NotMapped]
         public string FullName => $"{FirstName} {LastName}";
 
-        [ForeignKey(name: "Wage")]
-        public int? WageId { get; set; } = null;
-        public Wage Wage { get; set; }
+        public  ICollection<Wage> Wages { get; set; }
         
         
 }
