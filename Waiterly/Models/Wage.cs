@@ -24,6 +24,11 @@ namespace Waiterly.Models
         [Required]
         public double Hours { get; set; }
 
+        [Required]
+        public int RestaurantId { get; set; }
+
+        public Restaurant Restaurant { get; set; }
+
         [NotMapped]
         public double Salary => Dollars * Hours;
 

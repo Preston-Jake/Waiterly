@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Waiterly.Data;
 
 namespace Waiterly.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190916212023_wageRId")]
+    partial class wageRId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -275,8 +277,6 @@ namespace Waiterly.Migrations
 
                     b.HasIndex("RestaurantId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Wages");
                 });
 
@@ -292,7 +292,13 @@ namespace Waiterly.Migrations
 
                     b.Property<int?>("RestaurantUserId");
 
+                    b.Property<int?>("WageId");
+
                     b.HasIndex("RestaurantUserId");
+
+                    b.HasIndex("WageId")
+                        .IsUnique()
+                        .HasFilter("[WageId] IS NOT NULL");
 
                     b.HasDiscriminator().HasValue("ApplicationUser");
 
@@ -301,19 +307,20 @@ namespace Waiterly.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "57b6bb04-68a2-4eb5-ad54-ea5208cd5667",
+                            ConcurrencyStamp = "eb7748fc-2c5e-41d4-8a88-02d4f6517234",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAED4M5e1/FvYo6Y2DuBhJB33j6szXbKoV4EkuKWH+KIM/zNtxDi4pPv1Z0279EEDf3Q==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMWdyIuhp9K2eV/REtPXvBkCnWFIALIzFasyfY/M9BoczYtd1fJiylSoIQz/47nIpA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,
                             UserName = "admin@admin.com",
                             FirstName = "admin",
-                            LastName = "admin"
+                            LastName = "admin",
+                            WageId = 1
                         });
                 });
 
@@ -400,11 +407,6 @@ namespace Waiterly.Migrations
                         .WithMany()
                         .HasForeignKey("RestaurantId")
                         .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Waiterly.Models.ApplicationUser", "User")
-                        .WithMany("Wages")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Waiterly.Models.ApplicationUser", b =>
@@ -412,6 +414,10 @@ namespace Waiterly.Migrations
                     b.HasOne("Waiterly.Models.RestaurantUser")
                         .WithMany("Users")
                         .HasForeignKey("RestaurantUserId");
+
+                    b.HasOne("Waiterly.Models.Wage", "Wage")
+                        .WithOne("User")
+                        .HasForeignKey("Waiterly.Models.ApplicationUser", "WageId");
                 });
 #pragma warning restore 612, 618
         }
