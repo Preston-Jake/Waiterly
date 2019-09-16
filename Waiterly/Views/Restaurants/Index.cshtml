@@ -10,8 +10,8 @@
         if (User.IsInRole("Admin") || User.IsInRole("Manager"))
         {
             <p>
-    <a asp-action="Create">Add Restaurant</a>
-</p>
+                <a asp-action="Create">Add Restaurant</a>
+            </p>
         }
     }
 }
@@ -45,38 +45,38 @@
                 </td>
                 <td>
                     @{
-            if (User.Identity.IsAuthenticated)
-            {
+                        if (User.Identity.IsAuthenticated)
+                        {
 
-                if (User.IsInRole("Admin") || User.IsInRole("Manager"))
-                {
-                                        <p>
-                                            <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-info">Edit</button></a>
-                                            
-                                            <a asp-controller="Delete" asp-route-id="@item.Id" >
-                                                <button type="button" class="btn btn-danger">Delete</button>
-                                            </a>
-                                            <a asp-controller="UserTables" asp-action="index">
-                                                <button type="button" class="btn btn-primary">Manage</button>
-                                            </a>
-                                        </p>
+                            if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                            {
+                                <p>
+                                    <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-info">Edit</button></a>
 
-                                            }
-                                            }
-                                            }
-                                            @{
-                                                if (User.Identity.IsAuthenticated)
-                                                {
+                                    <a asp-controller="Delete" asp-route-id="@item.Id">
+                                        <button type="button" class="btn btn-danger">Delete</button>
+                                    </a>
+                                    <a asp-controller="UserTables" asp-action="Index" asp-route-restaurantId="@item.Id">
+                                        <button type="button" class="btn btn-primary">Manage</button>
+                                    </a>
+                                </p>
 
-                                                    if (User.IsInRole("Host") || User.IsInRole("Waiter"))
-                                                    {
-                                                        <p>
-                                                            <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-                                                        </p>
-                                                    }
-                                                }
-                                            }
-</td>
+                            }
+                        }
+                    }
+                    @{
+                        if (User.Identity.IsAuthenticated)
+                        {
+
+                            if (User.IsInRole("Host") || User.IsInRole("Waiter"))
+                            {
+                                <p>
+                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                </p>
+                            }
+                        }
+                    }
+                </td>
             </tr>
         }
     </tbody>

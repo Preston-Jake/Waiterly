@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Waiterly.Data;
 
 namespace Waiterly.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190913200055_update-usertables")]
+    partial class updateusertables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -327,13 +329,13 @@ namespace Waiterly.Migrations
                         {
                             Id = "00000000-ffff-ffff-ffff-ffffffffffff",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "52e4f886-05c5-461c-a751-9c5d8b494176",
+                            ConcurrencyStamp = "acd93aa0-b585-417d-8111-51daf7ede1ab",
                             Email = "admin@admin.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@ADMIN.COM",
                             NormalizedUserName = "ADMIN@ADMIN.COM",
-                            PasswordHash = "AQAAAAEAACcQAAAAELq0NFdENJ0ZxMLdte9sTwQX5qGAWYZ93M2jtWfOlX/GygeXma7+EU9hqdvBqE7QKg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEAYG3ZuB5k5Zf3Nnc4W47L4LI8y3wtvfY+d/E3qTaFafCGZ1lizp+QHScNJSJzqUjA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "7f434309-a4d9-48e9-9ebb-8803db794577",
                             TwoFactorEnabled = false,
