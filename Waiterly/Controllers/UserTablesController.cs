@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Waiterly.Data;
 using Waiterly.Models;
-using Waiterly.ViewModels.UserTableViewModel;
+//?? is there a way to save the restaurant id in the url and only show data related to that restaurant
+//I would have the change the routing
+// I know that it would look like restaurant/id/userTables to see the correct data but getting their is thwe question 
+//I might require a dictionary for paramaters 
+//other than than i know on manage click from the restaurant index view is where that data will be intilized the url need to read more into.. might cut down on page logic anyway
 
 namespace Waiterly.Controllers
 {
-    [Authorize(Roles = "Admin, Manager, Waiter, Host")]
     public class UserTablesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -28,81 +30,34 @@ namespace Waiterly.Controllers
         {
             return _userManager.GetUserAsync(HttpContext.User);
         }
-        // GET: UserTables
-        //var viewModel = new StudentInstructorViewModel();
-        //viewModel.Students = GetAllStudents();
-        //viewModel.Instructors = GetAllInstructors();
 
-        public async Task<IActionResult> Index()
+        private Task<List<UserTable>> GetRestaurantTables(int Id)
         {
-            //get usertables where the userTable.RestaurantId = the login users RestaunantUser.RestaunantID are the same 
-
-            //login user
-            var user = await GetUserAsync();
-            // where the login in user is join on restaurant
-            var userRestaurants = _context.RestaurantUsers.Where(ru => ru.UserId == user.Id).ToList();
-            //list of tables
-            var Tables = _context.Tables.ToList();
-            // list of assigned tables
-            var userTables = _context.UserTables.Include(ut => ut.Table).ToList();
-            // list of all tables in the restaurant
-            var restaurantTables = new List<Table>();
-            //list of all assigned table in restaurant 
-            var assignedTables = new List<UserTable>();
-
-            //foreach(var uTable in userTables)
-            //{
-            //    foreach(var ru in userRestaurants)
-            //    {
-            //        if (uTable.Table.RestaurantId == )
-            //        {
-
-            //        }
-            //    }
-            //}
-
-            //foreach(var table in Tables)
-            //{
-            //    foreach(var restaurant in userRestaurants)
-            //    {
-            //        if (table.RestaurantId == restaurant.RestaurantId)
-            //        {
-            //            restaurantTables.Add(table);
-            //        }
-            //    }
-            //}
-
-            //foreach (var aTable in userTables )
-            //{
-            //    foreach(var rTable in restaurantTables)
-            //    {
-            //        if(aTable.UserId == rTable.)
-            //    }
-            //}
-
-            
-
-
-            var viewModel = new UserTableViewModel()
-            { };
-                //UserTables = await _context.UserTables.Include(ut => ut.User).Include(ut => ut.Table).ToListAsync(),
-
-            
-
-            return View(viewModel);
+            return _context.UserTables.Where(ut => ut.RestaurantId == Id).ToListAsync();
         }
 
+        // GET: UserTables
+        [Route("Restaurants/{restaurantId}/UserTables")]
+        public async Task<IActionResult> Index(int restaurantId)
+        {
+            var applicationDbContext = _context.UserTables.Include(u => u.Restaurant).Include(u => u.User).Where(u => u.RestaurantId == restaurantId);
+            return View(await applicationDbContext.ToListAsync());
+        }
 
         // GET: UserTables/Details/5
-        public async Task<IActionResult> Details(int? id)
+        [Route("Restaurants/{restaurantId}/UserTables/{tableId}")]
+        public async Task<IActionResult> Details(int restaurantId, int? tableId )
         {
-            if (id == null)
+            if (tableId == null)
             {
                 return NotFound();
             }
 
             var userTable = await _context.UserTables
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(u => u.Restaurant)
+                .Include(u => u.User)
+                .Where(u => u.RestaurantId == restaurantId)
+                .FirstOrDefaultAsync(m => m.Id == tableId);
             if (userTable == null)
             {
                 return NotFound();
@@ -112,55 +67,78 @@ namespace Waiterly.Controllers
         }
 
         // GET: UserTables/Create
-        [Authorize(Roles = "Admin, Manager, Host")]
-        public IActionResult Create()
+        [Route("Restaurants/{restaurantId}/UserTables/Create")]
+        public IActionResult Create(int restaurantId)
         {
-            ViewData["Users"] = new SelectList(_context.ApplicationUsers, "Id", "FullName");
-            ViewData["Tables"] = new SelectList(_context.Tables, "Id", "TableNumber");
+            var rUsers = _context.RestaurantUsers.Include(ru => ru.User).ToList();
+            var employees = new List<ApplicationUser>();
+            foreach(var u in rUsers)
+            {
+                if(u.RestaurantId == restaurantId)
+                {
+                    employees.Add(u.User);
+                }
+            }
+
+            ViewData["RestaurantId"] = new SelectList(_context.Restaurants.Where(r => r.Id == restaurantId), "Id", "Name");
+            ViewData["UserId"] = new SelectList(employees, "Id", "FullName");
             return View();
         }
 
         // POST: UserTables/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin, Manager, Host")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserId,TableId")] UserTable userTable)
+        [Route("Restaurants/{restaurantId}/UserTables/Create")]
+        public async Task<IActionResult> Create([Bind("Id,UserId,TableNumber,Seats,RestaurantId")] UserTable userTable)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(userTable);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new { restaurantId = userTable.RestaurantId });
             }
+            ViewData["RestaurantId"] = new SelectList(_context.Restaurants, "Id", "Address", userTable.RestaurantId);
+            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", userTable.UserId);
             return View(userTable);
         }
 
         // GET: UserTables/Edit/5
-        [Authorize(Roles = "Admin, Manager, Host")]
-        public async Task<IActionResult> Edit(int? id)
+        [Route("Restaurants/{restaurantId}/UserTables/Edit/{tableId}")]
+        public async Task<IActionResult> Edit(int restaurantId , int? tableId)
         {
-            if (id == null)
+            if (tableId == null)
             {
                 return NotFound();
             }
 
-            var userTable = await _context.UserTables.FindAsync(id);
+            var userTable = await _context.UserTables.FindAsync(tableId);
             if (userTable == null)
             {
                 return NotFound();
             }
+            var rUsers = _context.RestaurantUsers.Include(ru => ru.User).ToList();
+            var employees = new List<ApplicationUser>();
+            foreach (var u in rUsers)
+            {
+                if (u.RestaurantId == restaurantId)
+                {
+                    employees.Add(u.User);
+                }
+            }
+            ViewData["RestaurantId"] = new SelectList(_context.Restaurants.Where(r => r.Id == restaurantId), "Id", "Name");
+            ViewData["UserId"] = new SelectList(employees, "Id", "FullName");
             return View(userTable);
         }
 
         // POST: UserTables/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin, Manager, Host")]
         [HttpPost]
+        [Route("Restaurants/{restaurantId}/UserTables/Edit/{tableId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,TableId")] UserTable userTable)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,TableNumber,Seats,RestaurantId")] UserTable userTable)
         {
             if (id != userTable.Id)
             {
@@ -185,22 +163,26 @@ namespace Waiterly.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new { restaurantId = userTable.RestaurantId });
             }
+            ViewData["RestaurantId"] = new SelectList(_context.Restaurants, "Id", "Address", userTable.RestaurantId);
+            ViewData["UserId"] = new SelectList(_context.ApplicationUsers, "Id", "Id", userTable.UserId);
             return View(userTable);
         }
 
         // GET: UserTables/Delete/5
-        [Authorize(Roles = "Admin, Manager, Host")]
-        public async Task<IActionResult> Delete(int? id)
+        [Route("Restaurants/{restaurantId}/UserTables/Delete/{tableId}")]
+        public async Task<IActionResult> Delete(int restaurantId , int? tableId)
         {
-            if (id == null)
+            if (tableId == null)
             {
                 return NotFound();
             }
 
             var userTable = await _context.UserTables
-                .FirstOrDefaultAsync(m => m.Id == id);
+                .Include(u => u.Restaurant)
+                .Include(u => u.User)
+                .FirstOrDefaultAsync(m => m.Id == tableId);
             if (userTable == null)
             {
                 return NotFound();
@@ -210,15 +192,15 @@ namespace Waiterly.Controllers
         }
 
         // POST: UserTables/Delete/5
-        [Authorize(Roles = "Admin, Manager, Host")]
         [HttpPost, ActionName("Delete")]
+        [Route("Restaurants/{id}/UserTables/Delete/{tableId}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var userTable = await _context.UserTables.FindAsync(id);
             _context.UserTables.Remove(userTable);
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", new { restaurantId = userTable.RestaurantId });
         }
 
         private bool UserTableExists(int id)

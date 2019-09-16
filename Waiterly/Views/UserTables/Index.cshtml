@@ -1,78 +1,62 @@
-﻿@model Waiterly.ViewModels.UserTableViewModel.UserTableViewModel
+﻿@model IEnumerable<Waiterly.Models.UserTable>
 
-@{
-    ViewData["Title"] = "Index";
-}
 
-<h1>Index</h1>
+
+
+<h1>Host</h1>
 
 <p>
-    <a asp-action="Create">Assign Table</a> |
-    <a asp-controller="Tables" asp-action="Create">Add Table</a>
+    @{
+        var restaurantId = ViewContext.RouteData.Values["restaurantId"];
 
+        <a asp-action="Create" asp-route-restaurantId="@restaurantId">Add Table</a>
+    }
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                Waiter
+                @Html.DisplayNameFor(model => model.User)
             </th>
             <th>
-                Table #
+                @Html.DisplayNameFor(model => model.TableNumber)
             </th>
             <th>
-                Seats
+                @Html.DisplayNameFor(model => model.Seats)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RestaurantId)
+            </th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-        @*@foreach (var userTable in Model.UserTables)
+        @foreach (var item in Model)
         {
-        @foreach (var table in Model.Tables)
-        {
-            if (userTable.TableId != table.Id)
-            {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => userTable.User.FullName)
+                    @Html.DisplayFor(modelItem => item.User.FullName)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => userTable.Table.TableNumber)
+                    @Html.DisplayFor(modelItem => item.TableNumber)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => userTable.Table.Seats)
+                    @Html.DisplayFor(modelItem => item.Seats)
                 </td>
-
-
                 <td>
-                    <a asp-action="Edit" asp-route-id="">Edit</a> |
-                    <a asp-action="Details" asp-route-id="">Details</a> |
-                    <a asp-action="Delete" asp-route-id="">Delete</a>
+                    @Html.DisplayFor(modelItem => item.Restaurant.Name)
+                </td>
+                <td>
+                    @{ var parms = new Dictionary<string, string> {
+                       {"restaurantId", $"{item.RestaurantId}" },
+                       {"tableId", $"{item.Id}" }
+                    };
+                    }
+                    <a asp-action="Edit" asp-all-route-data="parms">Edit</a> |
+                    <a asp-action="Details" asp-all-route-data="parms">Details</a> |
+                    <a asp-action="Delete" asp-all-route-data="parms">Delete</a>
                 </td>
             </tr>
-            }
-            else { 
-            <tr>
-                <td>
-                    
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => table.TableNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => table.Seats)
-                </td>
-
-
-                <td>
-                    <a asp-action="Edit" asp-route-id="">Edit</a> |
-                    <a asp-action="Details" asp-route-id="">Details</a> |
-                    <a asp-action="Delete" asp-route-id="">Delete</a>
-                </td>
-            </tr>
-                }
-            }
-        }*@
-
+        }
     </tbody>
 </table>

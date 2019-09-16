@@ -12,12 +12,21 @@ namespace Waiterly.Models
         [Required]
         public int Id { get; set; }
 
-        [Required]
-        public string UserId { get; set; }
+        [Display(Name = "Waiter")]
+        public string UserId { get; set; } = null;
         public ApplicationUser User { get; set; }
 
         [Required]
-        public int TableId { get; set; }
-        public Table Table { get; set; }
+        [Display(Name = "Table Number")]
+        public int TableNumber { get; set; }
+
+        [Required]
+        public int Seats { get; set; }
+
+        [Required]
+        [Display(Name = "Restaurant")]
+        public int RestaurantId { get; set; }
+        public Restaurant Restaurant { get; set; }
+
     }
 }

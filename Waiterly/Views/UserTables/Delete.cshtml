@@ -12,22 +12,37 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UserId)
+            @Html.DisplayNameFor(model => model.User)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UserId)
+            @Html.DisplayFor(model => model.User.Id)
+        </dd class>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TableNumber)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TableNumber)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.TableId)
+            @Html.DisplayNameFor(model => model.Seats)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.TableId)
+            @Html.DisplayFor(model => model.Seats)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Restaurant)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Restaurant.Address)
+        </dd class>
     </dl>
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        @{
+            var restaurantId = ViewContext.RouteData.Values["restaurantId"];
+            <a asp-action="Index" asp-route-restaurantId="@restaurantId">Back to List</a>
+        }
     </form>
 </div>

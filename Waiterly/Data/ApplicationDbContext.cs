@@ -21,7 +21,6 @@ namespace Waiterly.Data
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         public DbSet<Restaurant> Restaurants { get; set; }
         public DbSet<RestaurantUser> RestaurantUsers { get; set; }
-        public DbSet<Table> Tables { get; set; }
         public DbSet<UserTable> UserTables { get; set; }
         public DbSet<Wage> Wages { get; set; }
         
@@ -47,21 +46,7 @@ namespace Waiterly.Data
             var passwordHash = new PasswordHasher<ApplicationUser>();
             user.PasswordHash = passwordHash.HashPassword(user, "Admin8*");
             builder.Entity<ApplicationUser>().HasData(user);
-            builder.Entity<Restaurant>().HasData(
-                new {Id = 1 , Name = "TestRestaurant", Phone = "16155120998", Address = "111 Test Address" }
-                );
-            builder.Entity<Wage>().HasData(
-                new {Id = 1 , UserId = "00000000-ffff-ffff-ffff-ffffffffffff",  Dollars = 12.50 , Hours = 10.0, }
-                );
-            builder.Entity<Table>().HasData(
-                new {Id = 1 , TableNumber = 1, Seats = 2,  RestaurantId = 1 }
-                );
-            builder.Entity<RestaurantUser>().HasData(
-                new {Id = 1 , UserId = "00000000-ffff-ffff-ffff-ffffffffffff", RestaurantId = 1 }
-                );
-            builder.Entity<UserTable>().HasData(
-                new { Id = 1, UserId = "00000000-ffff-ffff-ffff-ffffffffffff", TableId = 1 } 
-                );
+            
 
         }
 
