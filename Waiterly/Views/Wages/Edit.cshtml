@@ -28,15 +28,21 @@
                 <span asp-validation-for="Hours" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="RestaurantId" class="control-label"></label>
+                @*<select asp-for="RestaurantId" class="form-control" asp-items="ViewBag.RestaurantId"></select>*@
+                <input hidden asp-for="RestaurantId"/>
+            </div>
+            <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@{
+    var restaurantId = ViewContext.RouteData.Values["restaurantId"];
+    <a asp-action="Index" asp-route-restaurantId="@restaurantId">Back to List</a>
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
