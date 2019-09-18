@@ -30,6 +30,7 @@ namespace Waiterly.Models
         public Restaurant Restaurant { get; set; }
 
         [NotMapped]
+        [Display(Name = "Payout")]
         public double Salary => Dollars * Hours;
 
     }

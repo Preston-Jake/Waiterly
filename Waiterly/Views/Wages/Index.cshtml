@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<Waiterly.Models.Wage>
 <h1>Payroll</h1>
 
+
 <p>
     @{
         var restaurantId = ViewContext.RouteData.Values["restaurantId"];
@@ -47,9 +48,9 @@
                             @Html.DisplayFor(modelItem => item.Hours)
                         </td>
                         <td>
-                            <a asp-action="Edit" asp-all-route-data="parms">Edit</a>
-                            <a asp-action="Details" asp-all-route-data="parms">Details</a>
-                            <a asp-action="Delete" asp-all-route-data="parms">Delete</a>
+                            <a asp-action="Edit" asp-all-route-data="parms"><button type="button" class="btn btn-outline-warning btn-sm">Update</button></a>
+                            <a asp-action="Details" asp-all-route-data="parms"><button type="button" class="btn btn-success btn-sm">Payout</button></a>
+                            <a asp-action="Delete" asp-all-route-data="parms"><button type="button" class="btn btn-danger btn-sm">Remove</button></a>
                         </td>
                     </tr>
 
@@ -59,30 +60,31 @@
             {
                 @foreach (var item in Model)
                 {
-                    if (item.UserId == ViewBag.LoginUser.Id) {
-                    var parms = new Dictionary<string, string> {
+                    if (item.UserId == ViewBag.LoginUser.Id)
+                    {
+                        var parms = new Dictionary<string, string> {
                        {"restaurantId", $"{restaurantId}" },
                        {"wageId", $"{item.Id}" }
 
                     };
-                    <tr>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.User.FullName)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Dollars)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem => item.Hours)
-                        </td>
-                        <td>
-                            <a asp-action="Edit" asp-all-route-data="parms">Hours</a>
-                            <hr>
-                            <a asp-action="Details" asp-all-route-data="parms">Details</a>
-                        </td>
-                    </tr>
-                    }
-                }
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.User.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Dollars)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Hours)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-all-route-data="parms">Hours</a>
+                        <hr>
+                        <a asp-action="Details" asp-all-route-data="parms">Details</a>
+                    </td>
+                </tr>
+            }
+        }
             }
         }
 
