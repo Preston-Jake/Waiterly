@@ -1,20 +1,21 @@
 ﻿@model IEnumerable<Waiterly.Models.UserTable>
-
-
-
-
 <h1>Host</h1>
 
 <p>
     @{
         var restaurantId = ViewContext.RouteData.Values["restaurantId"];
-
+        if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Host"))
+        {
         <a asp-action="Create" asp-route-restaurantId="@restaurantId">Add Table</a>
-    }
+            }
+        }
 </p>
 <table class="table">
     <thead>
         <tr>
+            <th>
+
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.User)
             </th>
@@ -33,30 +34,56 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.User.FullName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.TableNumber)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Seats)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Restaurant.Name)
-                </td>
-                <td>
-                    @{ var parms = new Dictionary<string, string> {
+            var parms = new Dictionary<string, string> {
                        {"restaurantId", $"{item.RestaurantId}" },
                        {"tableId", $"{item.Id}" }
                     };
+
+        <tr>
+            @{
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Host"))
+                {
+
+                    if (item.UserId != null)
+                    {
+                        <td>
+                            <form asp-action="Unassign">
+                                <input hidden name="unassignId" value="@item.Id" />
+                                <button type="submit" class="btn btn-outline-danger"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>                                Unassign <span class="sr-only">(current)</span></button>
+                            </form>
+                        </td>
                     }
-                    <a asp-action="Edit" asp-all-route-data="parms">Edit</a> |
-                    <a asp-action="Details" asp-all-route-data="parms">Details</a> |
+                    else
+                    {
+
+                        <td>
+                            <a asp-action="Edit" asp-all-route-data="parms"><button type="button" class="btn btn-info"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>                                Assign <span class="sr-only">(current)</span></button></a>
+                        </td>
+                    }
+                }
+
+            }
+
+            <td>
+                @Html.DisplayFor(modelItem => item.User.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TableNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Seats)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Restaurant.Name)
+            </td>
+            <td>
+                <a asp-action="Details" asp-all-route-data="parms">Details</a> |
+                @if (User.IsInRole("Admin") || User.IsInRole("Manager") || User.IsInRole("Host"))
+                {
                     <a asp-action="Delete" asp-all-route-data="parms">Delete</a>
-                </td>
-            </tr>
+                }
+            </td>
+        </tr>
         }
     </tbody>
 </table>

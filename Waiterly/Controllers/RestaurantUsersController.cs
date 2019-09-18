@@ -40,8 +40,7 @@ namespace Waiterly.Controllers
         
         public async Task<IActionResult> Index(int? restaurantId)
         {
-            var user = await GetUserAsync();
-            
+            ViewBag.LoginUser = await GetUserAsync();
 
             var restaurantUsers = await _context.RestaurantUsers
                 .Include(ru => ru.User)

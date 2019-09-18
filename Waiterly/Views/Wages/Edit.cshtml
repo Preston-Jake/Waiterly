@@ -3,40 +3,89 @@
 @{
     ViewData["Title"] = "Edit";
 }
+@if (User.Identity.IsAuthenticated)
+{
 
-<h1>Edit</h1>
+    if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+    {
+        <h1>Payroll</h1>
 
-<h4>Wage</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+        <h4>Wage</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div class="form-group">
+                        <label asp-for="UserId" class="control-label"></label>
+                        <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Dollars" class="control-label"></label>
+                        <input asp-for="Dollars" class="form-control" />
+                        <span asp-validation-for="Dollars" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Hours" class="control-label"></label>
+                        <input asp-for="Hours" class="form-control" />
+                        <span asp-validation-for="Hours" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="RestaurantId" class="control-label"></label>
+                        <input hidden asp-for="RestaurantId" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label asp-for="Dollars" class="control-label"></label>
-                <input asp-for="Dollars" class="form-control" />
-                <span asp-validation-for="Dollars" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Hours" class="control-label"></label>
-                <input asp-for="Hours" class="form-control" />
-                <span asp-validation-for="Hours" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
+    }
+    else
+    {
+        <h1>Payroll</h1>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+        <h4>Wage</h4>
+        <hr />
+        <div class="row">
+            <div class="col-md-4">
+                <form asp-action="Edit">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <div hidden class="form-group">         
+                        <label asp-for="UserId" class="control-label"></label>
+                        <select asp-for="UserId" class="form-control" asp-items="ViewBag.UserId"></select>
+                    </div>
+                    <div class="form-group">    
+                        <label asp-for="Dollars" class="control-label"></label>
+                        <input hidden asp-for="Dollars" class="form-control" value="@Model.Dollars" />
+                        <p>$@Model.Dollars<p>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Hours" class="control-label"></label>
+                        <input asp-for="Hours" class="form-control" />
+                        <span asp-validation-for="Hours" class="text-danger"></span>
+                    </div>
+                    <div hidden class="form-group">
+                        <label asp-for="RestaurantId" class="control-label"></label>
+                        @*<select asp-for="RestaurantId" class="form-control" asp-items="ViewBag.RestaurantId"></select>*@
+                        <input hidden asp-for="RestaurantId" />
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+}
+
+
+@{
+    var restaurantId = ViewContext.RouteData.Values["restaurantId"];
+    <a asp-action="Index" asp-route-restaurantId="@restaurantId">Back to List</a>
+}
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

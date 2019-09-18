@@ -20,6 +20,5 @@ namespace Waiterly.Models
         [Required]
         public string Address { get; set; }
         
-     
     }
 }

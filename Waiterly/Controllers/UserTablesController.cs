@@ -171,6 +171,31 @@ namespace Waiterly.Controllers
             return View(userTable);
         }
 
+        [HttpPost, ActionName("Unassign")]
+        [ValidateAntiForgeryToken]
+        [Route("Restaurants/{restaurantId}/UserTables")]
+        public async Task<IActionResult> Unassign(int unassignId )
+        {
+            var routeId = RouteData.Values["restaurantId"].ToString();
+
+
+            if (ModelState.IsValid)
+            {
+                    var unassignTables = _context.UserTables.Where(ut => ut.Id == unassignId);
+                    var unassignTable = new UserTable();
+                    foreach(var table in unassignTables)
+                    {
+                    unassignTable = table;
+                    }
+                    unassignTable.UserId = null;
+                    _context.UserTables.Update(unassignTable);
+                    await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", new { restaurantId = routeId });
+            }
+            return RedirectToAction("Index", new { restaurantId = routeId });
+
+        }
         // GET: UserTables/Delete/5
         [Route("Restaurants/{restaurantId}/UserTables/Delete/{tableId}")]
         public async Task<IActionResult> Delete(int restaurantId , int? tableId)
