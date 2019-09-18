@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -14,17 +15,25 @@ namespace Waiterly.Controllers
     public class WagesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public WagesController(ApplicationDbContext context)
+        public WagesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
+            _userManager = userManager;
             _context = context;
+        }
+        private Task<ApplicationUser> GetUserAsync()
+        {
+            return _userManager.GetUserAsync(HttpContext.User);
         }
 
         // GET: Wages
         [Authorize(Roles = "Admin, Manager, Waiter, Host")]
         [Route("Restaurants/{restaurantId}/Payroll")]
-        public IActionResult Index(int restaurantId)
+        public async Task<IActionResult> Index(int restaurantId)
         {
+            
+            ViewBag.LoginUser = await GetUserAsync(); 
             var rUsers = _context.RestaurantUsers.Include(u => u.User).Where(u => u.RestaurantId == restaurantId).ToList();
             var wages = _context.Wages.Include(w => w.User).ToList();
             var payroll = new List<Wage>();
@@ -102,7 +111,7 @@ namespace Waiterly.Controllers
         }
 
         // GET: Wages/Edit/5
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin, Manager, Waiter, Host")]
         [Route("Restaurants/{restaurantId}/Payroll/{wageId}/Edit")]
         public async Task<IActionResult> Edit(int restaurantId, int? wageId)
         {
@@ -112,13 +121,12 @@ namespace Waiterly.Controllers
             }
 
             var wage = await _context.Wages.FindAsync(wageId);
-
+            
             if (wage == null)
             {
                 return NotFound();
             }
-            var routeId = RouteData.Values["restaurantId"].ToString();
-
+            var routeId = RouteData.Values["restaurantId"].ToString();            
             ViewData["UserId"] = new SelectList(_context.ApplicationUsers.Where(u => u.Id == wage.UserId), "Id", "FullName");
             ViewData["RestaurantId"] = new SelectList(_context.Restaurants.Where(r => r.Id == Int32.Parse(routeId)), "Id", "Name");
             return View(wage);
@@ -127,7 +135,7 @@ namespace Waiterly.Controllers
         // POST: Wages/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [Authorize(Roles = "Admin, Manager")]
+        [Authorize(Roles = "Admin, Manager, Waiter, Host")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Restaurants/{restaurantId}/Payroll/{wageId}/Edit")]

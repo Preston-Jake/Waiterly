@@ -20,32 +20,32 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model)
-{
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.FullName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Restaurant.Name)
-            </td>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.FullName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Restaurant.Name)
+                </td>
 
-            <td>
-                @{ var parms = new Dictionary<string, string> {
+                <td>
+                    @{ var parms = new Dictionary<string, string> {
                        {"restaurantId", $"{item.RestaurantId}" },
                        {"employeeId", $"{item.Id}" }
                     };
-                }
+                    }
                     @{
                         if (User.Identity.IsAuthenticated)
                         {
 
                             if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                             {
-                                    <p>
-                                        <a asp-action="Details" asp-all-route-data="parms">Details</a> |
-                                        <a asp-action="Delete" asp-all-route-data="parms">Delete</a>
-                                    </p>
+                                <p>
+                                    <a asp-action="Details" asp-all-route-data="parms">Details</a> |
+                                    <a asp-action="Delete" asp-all-route-data="parms">Leave</a>
+                                </p>
                             }
                         }
                     }
@@ -55,16 +55,22 @@
 
                             if (User.IsInRole("Host") || User.IsInRole("Waiter"))
                             {
-                                <p>
-                                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                                    <a asp-action="Delete" asp-route-id="@item.Id">Leave</a>
-                                </p>
+                                        <p>
+                                            <a asp-action="Details" asp-all-route-data="parms">Details</a>|
+                                            @{
+                                                if (item.UserId == ViewBag.LoginUser.Id)
+                                                {
+                                                    <a asp-action="Delete" asp-all-route-data="parms">Leave</a>
+
+                                                }
+                                            }
+                                        </p>
                             }
                         }
                     }
 
                 </td>
-        </tr>
-}
+            </tr>
+        }
     </tbody>
 </table>
