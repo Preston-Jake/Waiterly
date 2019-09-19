@@ -31,12 +31,16 @@
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Salary)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class = "col-sm-10 bg-success">
             @Html.DisplayFor(model => model.Salary)
         </dd>
     </dl>
 </div>
 <div>
+    <form asp-action="Payout">
+        <input hidden name="unassignId" value="@Model.Id" />
+        <button type="submit" class="btn btn-success btn-sm">Payout</button>
+    </form>
     <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
     @{
         var restaurantId = ViewContext.RouteData.Values["restaurantId"];

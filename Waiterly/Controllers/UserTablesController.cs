@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,11 +21,13 @@ namespace Waiterly.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        
 
         public UserTablesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _userManager = userManager;
+            
         }
         private Task<ApplicationUser> GetUserAsync()
         {
@@ -38,14 +41,17 @@ namespace Waiterly.Controllers
 
         // GET: UserTables
         [Route("Restaurants/{restaurantId}/UserTables")]
+        [Authorize(Roles = "Admin, Manager, Waiter, Host")]
         public async Task<IActionResult> Index(int restaurantId)
         {
+            ViewBag.LoginUser = await GetUserAsync();
             var applicationDbContext = _context.UserTables.Include(u => u.Restaurant).Include(u => u.User).Where(u => u.RestaurantId == restaurantId);
             return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: UserTables/Details/5
         [Route("Restaurants/{restaurantId}/UserTables/{tableId}")]
+        [Authorize(Roles = "Admin, Manager, Waiter, Host")]
         public async Task<IActionResult> Details(int restaurantId, int? tableId )
         {
             if (tableId == null)
@@ -65,15 +71,17 @@ namespace Waiterly.Controllers
 
             return View(userTable);
         }
-
+        
         // GET: UserTables/Create
         [Route("Restaurants/{restaurantId}/UserTables/Create")]
+        [Authorize(Roles = "Admin, Manager, Host")]
         public IActionResult Create(int restaurantId)
         {
             var rUsers = _context.RestaurantUsers.Include(ru => ru.User).ToList();
             var employees = new List<ApplicationUser>();
             foreach(var u in rUsers)
             {
+                
                 if(u.RestaurantId == restaurantId)
                 {
                     employees.Add(u.User);
@@ -91,6 +99,7 @@ namespace Waiterly.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Restaurants/{restaurantId}/UserTables/Create")]
+        [Authorize(Roles = "Admin, Manager, Host")]
         public async Task<IActionResult> Create([Bind("Id,UserId,TableNumber,Seats,RestaurantId")] UserTable userTable)
         {
             if (ModelState.IsValid)
@@ -107,6 +116,7 @@ namespace Waiterly.Controllers
 
         // GET: UserTables/Edit/5
         [Route("Restaurants/{restaurantId}/UserTables/Edit/{tableId}")]
+        [Authorize(Roles = "Admin, Manager, Host")]
         public async Task<IActionResult> Edit(int restaurantId , int? tableId)
         {
             if (tableId == null)
@@ -139,6 +149,7 @@ namespace Waiterly.Controllers
         [HttpPost]
         [Route("Restaurants/{restaurantId}/UserTables/Edit/{tableId}")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager, Host")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,UserId,TableNumber,Seats,RestaurantId")] UserTable userTable)
         {
             if (id != userTable.Id)
@@ -174,6 +185,7 @@ namespace Waiterly.Controllers
         [HttpPost, ActionName("Unassign")]
         [ValidateAntiForgeryToken]
         [Route("Restaurants/{restaurantId}/UserTables")]
+        [Authorize(Roles = "Admin, Manager, Host")]
         public async Task<IActionResult> Unassign(int unassignId )
         {
             var routeId = RouteData.Values["restaurantId"].ToString();
@@ -198,6 +210,7 @@ namespace Waiterly.Controllers
         }
         // GET: UserTables/Delete/5
         [Route("Restaurants/{restaurantId}/UserTables/Delete/{tableId}")]
+        [Authorize(Roles = "Admin, Manager, Host")]
         public async Task<IActionResult> Delete(int restaurantId , int? tableId)
         {
             if (tableId == null)
@@ -221,6 +234,7 @@ namespace Waiterly.Controllers
         [HttpPost, ActionName("Delete")]
         [Route("Restaurants/{id}/UserTables/Delete/{tableId}")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin, Manager, Host")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var userTable = await _context.UserTables.FindAsync(id);

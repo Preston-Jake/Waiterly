@@ -140,6 +140,7 @@ namespace Waiterly.Controllers
         }
 
         // GET: Restaurants/Delete/5
+        [HttpGet, ActionName("Delete")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)

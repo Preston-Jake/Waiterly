@@ -37,7 +37,7 @@ namespace Waiterly.Controllers
         // return a list of employees where the Login User Also Works
 
         [Route("Restaurants/{restaurantId}/Employees")]
-        
+        [Authorize(Roles = "Admin, Manager, Waiter, Host")]
         public async Task<IActionResult> Index(int? restaurantId)
         {
             ViewBag.LoginUser = await GetUserAsync();
@@ -53,7 +53,7 @@ namespace Waiterly.Controllers
 
         // GET: RestaurantUsers/Details/5
         [Route("Restaurants/{restaurantId}/Employees/{employeeId}/Details")]
-
+        [Authorize(Roles = "Admin, Manager, Waiter, Host")]
         public async Task<IActionResult> Details(int restaurantId ,int? employeeId)
         {
             if (employeeId == null)
@@ -76,6 +76,7 @@ namespace Waiterly.Controllers
         // GET: RestaurantUsers/Create
         
         [Route("Restaurants/Employees/Create")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create(int? restaurantId)
         {
             var restaurants = await _context.Restaurants.ToListAsync();
@@ -89,7 +90,7 @@ namespace Waiterly.Controllers
         [Route("Restaurants/Employees/Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Create([Bind("Id,RestaurantId")] RestaurantUser restaurantUser)
         {
             ModelState.Remove("UserId");
@@ -108,7 +109,7 @@ namespace Waiterly.Controllers
 
         // GET: RestaurantUsers/Delete/5
         [Route("Restaurants/{restaurantId}/Employees/{employeeId}/Delete")]
-
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> Delete(int restaurantId , int? employeeId)
         {
             if (employeeId == null)
@@ -130,6 +131,7 @@ namespace Waiterly.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Route("Restaurants/{restaurantId}/Employees/{employeeId}/Delete")]
+        [Authorize(Roles = "Admin, Manager")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var restaurantUser = await _context.RestaurantUsers.FindAsync(id);

@@ -71,6 +71,30 @@ namespace Waiterly.Controllers
             return View(wage);
         }
 
+        [HttpPost, ActionName("Payout")]
+        [ValidateAntiForgeryToken]
+        [Route("Restaurants/{restaurantId}/Payroll/{wageId}")]
+        [Authorize(Roles = "Admin, Manager, Host")]
+        public async Task<IActionResult> Unassign(int wageId)
+        {
+            var routeId = RouteData.Values["restaurantId"].ToString();
+
+
+            if (ModelState.IsValid)
+            {
+                var payout = _context.Wages.FirstOrDefault(w => w.Id == wageId);
+
+
+                payout.Hours = 0;
+
+                _context.Wages.Update(payout);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", new { restaurantId = routeId });
+            }
+            return RedirectToAction("Index", new { restaurantId = routeId });
+
+        }
         // GET: Wages/Create
         [Authorize(Roles = "Admin, Manager")]
         [Route("Restaurants/{restaurantId}/Payroll/Create")]
