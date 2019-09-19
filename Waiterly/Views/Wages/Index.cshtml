@@ -49,8 +49,8 @@
                         </td>
                         <td>
                             <a asp-action="Edit" asp-all-route-data="parms"><button type="button" class="btn btn-outline-warning btn-sm">Update</button></a>
-                            <a asp-action="Details" asp-all-route-data="parms"><button type="button" class="btn btn-success btn-sm">Payout</button></a>
-                            <a asp-action="Delete" asp-all-route-data="parms"><button type="button" class="btn btn-danger btn-sm">Remove</button></a>
+                            <a asp-action="Details" asp-all-route-data="parms"><button type="button" class="btn btn-outline-success btn-sm">Payout</button></a>
+                            <a asp-action="Delete" asp-all-route-data="parms"><button type="button" class="btn btn-outline-danger btn-sm">Remove</button></a>
                         </td>
                     </tr>
 
@@ -78,9 +78,8 @@
                         @Html.DisplayFor(modelItem => item.Hours)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-all-route-data="parms">Hours</a>
-                        <hr>
-                        <a asp-action="Details" asp-all-route-data="parms">Details</a>
+                        <a asp-action="Edit" asp-all-route-data="parms"><button type="button" class="btn btn-outline-warning btn-sm">Log</button></a>
+                        <a asp-action="Details" asp-all-route-data="parms"><button type="button" class="btn btn-outline-success btn-sm">Payout</button></a>
                     </td>
                 </tr>
             }

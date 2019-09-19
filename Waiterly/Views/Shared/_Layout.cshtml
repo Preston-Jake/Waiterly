@@ -16,62 +16,66 @@
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
     </environment>
     <link rel="stylesheet" href="~/css/site.css" />
+    <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans|Open+Sans&display=swap" rel="stylesheet">
 </head>
-<body>
-    <nav class="navbar navbar-expand-xl navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container">
-            <a id="main-title" class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Waiterly</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
-                <partial name="_LoginPartial" />
-                <ul class="navbar-nav flex-grow-1">
-                </ul>
+<body class="">
+    <div id="waiterly-wrapper">
+        <nav id="main-nav" class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve" width="40px" height="40px" class=""><g><g><g><path d="M485.415,423.472v-33.575c0-4.433-3.592-8.025-8.025-8.025h-24.489v-67.706c0-8.042-2.541-15.498-6.851-21.623h40.523    c14.021,0,25.427-11.406,25.427-25.427c0-14.021-11.406-25.427-25.427-25.427h-15.794    c-15.301-95.026-91.813-168.118-185.738-180.766c4.995-6.312,7.987-14.276,7.987-22.93c0-20.417-16.612-37.027-37.028-37.027    c-20.417,0-37.027,16.612-37.027,37.027c0,8.655,2.993,16.619,7.987,22.93C133.033,73.57,56.522,146.662,41.224,241.688H25.427    C11.406,241.688,0,253.094,0,267.115c0,14.02,11.406,25.427,25.427,25.427h30.662c1.929,10.442,9.671,27.52,38.155,39.934    c31.937,13.923,168.927,31.279,220.724,37.47v11.926h-11.597c-4.433,0-8.025,3.592-8.025,8.025v33.575    c-13.438,0.658-24.169,11.797-24.169,25.395v36.739c0,14.021,11.406,25.427,25.427,25.427h187.552    c14.02,0,25.427-11.406,25.427-25.427v-36.739C509.584,435.269,498.853,424.13,485.415,423.472z M255.999,17.015    c11.568,0,20.978,9.411,20.978,20.977c0,11.568-9.411,20.978-20.978,20.978c-11.567-0.001-20.977-9.412-20.977-20.978    C235.022,26.426,244.432,17.015,255.999,17.015z M256,75.019c98.081,0,181.854,71.03,198.519,166.668H57.483    C74.146,146.05,157.918,75.019,256,75.019z M63.614,276.493H25.427c-5.17-0.001-9.377-4.207-9.377-9.377s4.207-9.377,9.377-9.377    h22.731h415.686h22.729c5.17,0,9.377,4.207,9.377,9.377s-4.207,9.377-9.377,9.377H415.23H63.614z M100.656,317.764    c-19.346-8.433-25.907-18.606-28.086-25.222h342.66c11.923,0,21.621,9.699,21.621,21.623v67.706H331.018v-19.055    c0-4.069-3.046-7.494-7.087-7.969C232.41,344.076,125.694,328.678,100.656,317.764z M493.534,485.606    c0,5.17-4.207,9.377-9.377,9.377H296.605c-5.17,0-9.377-4.207-9.377-9.377v-36.739c0-5.17,4.207-9.377,9.377-9.377h6.767h7.734    h31.055c4.433,0,8.025-3.592,8.025-8.025s-3.592-8.025-8.025-8.025h-30.764v-25.518h11.597h121.804h24.568v25.518h-101.88    c-4.433,0-8.025,3.592-8.025,8.025s3.592,8.025,8.025,8.025H477.39h6.767c5.17,0,9.377,4.207,9.377,9.377V485.606z" data-original="#000000" class="active-path" data-old_color="#000000" fill="#FFFFFF" /></g></g></g> </svg>
+                <a id="main-title" class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    Waiterly
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <partial name="_LoginPartial" />
+                    <ul class="navbar-nav flex-grow-1">
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid">
+            <div class="row flex-xl-nowrap">
+                @{ if (User.Identity.IsAuthenticated)
+                    {
+
+                        <div class="col-12 col-md-3 col-xl-2 bd-sidebar ">
+                            <nav>
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="Restaurants" asp-action="Index">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                            Restaurants <span class="sr-only">(current)</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" asp-controller="RestaurantUsers" asp-action="Create">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>                                Join Restaurant <span class="sr-only">(current)</span>
+                                        </a>
+                                    </li>
+                                    @{
+                                        if (User.IsInRole("Admin"))
+                                        {
+                                            <li class="nav-item">
+                                                <a class="nav-link" asp-controller="Role" asp-action="Index">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>                               Role <span class="sr-only">(current)</span>
+                                                </a>
+                                            </li>
+                                        }
+                                    }
+                                </ul>
+                            </nav>
+                        </div>
+                    } }
+                <main role="main" class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
+                    @RenderBody()
+                </main>
             </div>
         </div>
-    </nav>
-
-    <div class="container-fluid">
-        <div class="row flex-xl-nowrap">
-            @{ if (User.Identity.IsAuthenticated)
-                {
-
-                    <div class="col-12 col-md-3 col-xl-2 bd-sidebar">
-                        <nav>
-                            <ul class="nav flex-column">
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="Restaurants" asp-action="Index">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                                        Restaurants <span class="sr-only">(current)</span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" asp-controller="RestaurantUsers" asp-action="Create">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-circle"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>                                Join Restaurant <span class="sr-only">(current)</span>
-                                    </a>
-                                </li>
-                                @{
-                                    if (User.IsInRole("Admin"))
-                                    {
-                                        <li class="nav-item">
-                                            <a class="nav-link" asp-controller="Role" asp-action="Index">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-file"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>                               Role <span class="sr-only">(current)</span>
-                                            </a>
-                                        </li>
-                                    }
-                                }
-                            </ul>
-                        </nav>
-                    </div>
-                } }
-            <main role="main" class="col-12 col-md-9 col-xl-8 py-md-3 pl-md-5 bd-content">
-                @RenderBody()
-            </main>
-        </div>
     </div>
-
     <footer class="border-top footer text-muted">
         <div class="container">
             &copy; 2019 - Waiterly - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -80,7 +84,7 @@
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
     </environment>
     <environment exclude="Development">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"
@@ -99,5 +103,5 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @RenderSection("Scripts", required: false)
-    </body>
+</body>
 </html>

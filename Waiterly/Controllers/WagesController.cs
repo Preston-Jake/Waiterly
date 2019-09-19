@@ -74,6 +74,7 @@ namespace Waiterly.Controllers
         [HttpPost, ActionName("Payout")]
         [ValidateAntiForgeryToken]
         [Route("Restaurants/{restaurantId}/Payroll/{wageId}")]
+        [Authorize(Roles = "Admin, Manager, Host")]
         public async Task<IActionResult> Unassign(int wageId)
         {
             var routeId = RouteData.Values["restaurantId"].ToString();

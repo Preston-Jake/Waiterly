@@ -97,22 +97,44 @@
             }
             else
             {
-                <tr class="table">
-                    <td>
-                    </td>
-                    <td class="align-middle">
-                        @Html.DisplayFor(modelItem => item.User.FullName)
-                    </td>
-                    <td class="align-middle">
-                        @Html.DisplayFor(modelItem => item.TableNumber)
-                    </td>
-                    <td class="align-middle">
-                        @Html.DisplayFor(modelItem => item.Seats)
-                    </td>
-                    <td class="align-middle">
-                        @Html.DisplayFor(modelItem => item.Restaurant.Name)
-                    </td>
-                </tr>
+                if (item.UserId == ViewBag.LoginUser.Id)
+                {
+                    <tr class="table-success">
+                        <td>
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.User.FullName)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.TableNumber)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Seats)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Restaurant.Name)
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    <tr class="table">
+                        <td>
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.User.FullName)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.TableNumber)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Seats)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Restaurant.Name)
+                        </td>
+                    </tr>
+                }
             }
         }
     </tbody>

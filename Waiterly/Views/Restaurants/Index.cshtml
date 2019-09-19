@@ -10,73 +10,56 @@
         if (User.IsInRole("Admin") || User.IsInRole("Manager"))
         {
             <p>
-                <a asp-action="Create">Add Restaurant</a>
+                <a asp-action="Create"><button type="button" class="btn btn-primary btn-sm">Add Restaurant</button></a>
             </p>
         }
     }
 }
-<table class="table">
-    <thead>
-        <tr >
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Phone)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Address)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr class="table">
-                <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.Phone)
-                </td>
-                <td class="align-middle">
-                    @Html.DisplayFor(modelItem => item.Address)
-                </td>
-                <td class="align-middle">
-                    @{
-                        if (User.Identity.IsAuthenticated)
-                        {
+<div class="">
+    @foreach (var item in Model)
+    {
+        <div class="card mb-3">
+            <h3 class="card-header">@Html.DisplayFor(modelItem => item.Name)</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">Phone: @Html.DisplayFor(modelItem => item.Phone)</li>
+                <li class="list-group-item">Address: @Html.DisplayFor(modelItem => item.Address)</li>
+            </ul>
+            <div id="card-btns" class="card-body">
+                @{
+                    if (User.Identity.IsAuthenticated)
+                    {
 
-                            if (User.IsInRole("Admin") || User.IsInRole("Manager"))
-                            {
-                                <div class="btn-group">
-                                    <a asp-controller="UserTables" asp-action="Index" asp-route-restaurantId="@item.Id">
-                                        <button type="button" class="btn btn-primary btn-sm">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                                            Dining Room <span class="sr-only">(current)</span>
-                                        </button>
-                                    </a>
-                                    <a asp-controller="Wages" asp-action="Index" asp-route-restaurantId="@item.Id">
-                                        <button type="button" class="btn btn-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>                                Payroll <span class="sr-only">(current)</span></button>
-                                    </a>
-                                    <a asp-controller="RestaurantUsers" asp-action="Index" asp-route-restaurantId="@item.Id">
-                                        <button type="button" class="btn btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>                                Employees <span class="sr-only">(current)</span></button>
-                                    </a>
-                                </div>
-                                <div class="btn-group">
-                                    <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm">Edit</button></a>
-                                    <a asp-action="Delete" asp-route-id="@item.Id"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
-                                </div>
-                            }
+                        if (User.IsInRole("Admin") || User.IsInRole("Manager"))
+                        {
+                            <div class="">
+                                <a asp-controller="UserTables" asp-action="Index" asp-route-restaurantId="@item.Id">
+                                    <button type="button" class="btn btn-primary btn-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                                        Dining Room <span class="sr-only">(current)</span>
+                                    </button>
+                                </a>
+                                <a asp-controller="Wages" asp-action="Index" asp-route-restaurantId="@item.Id">
+                                    <button type="button" class="btn btn-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>                                Payroll <span class="sr-only">(current)</span></button>
+                                </a>
+                                <a asp-controller="RestaurantUsers" asp-action="Index" asp-route-restaurantId="@item.Id">
+                                    <button type="button" class="btn btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>                                Employees <span class="sr-only">(current)</span></button>
+                                </a>
+                            </div>
+                            
+                            <div class="">
+                                <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm">Edit</button></a>
+                                <a asp-action="Delete" asp-route-id="@item.Id"><button type="button" class="btn btn-danger btn-sm">Delete</button></a>
+                            </div>
                         }
                     }
-                    @{
-                        if (User.Identity.IsAuthenticated)
-                        {
+                }
+                @{
+                    if (User.Identity.IsAuthenticated)
+                    {
 
-                            if (User.IsInRole("Host") || User.IsInRole("Waiter"))
-                            {
+                        if (User.IsInRole("Host") || User.IsInRole("Waiter"))
+                        {
+                            <div class="">
                                 <a asp-controller="UserTables" asp-action="Index" asp-route-restaurantId="@item.Id">
                                     <button type="button" class="btn btn-primary btn-sm">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-home"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
@@ -84,21 +67,24 @@
                                     </button>
                                 </a>
 
-                                <a class="nav-link" asp-controller="Wages" asp-action="Index" asp-route-restaurantId="@item.Id">
+                                <a  asp-controller="Wages" asp-action="Index" asp-route-restaurantId="@item.Id">
                                     <button type="button" class="btn btn-success btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>                                Payroll <span class="sr-only">(current)</span></button>
                                 </a>
 
-                                <a class="nav-link" asp-controller="RestaurantUsers" asp-action="Index" asp-route-restaurantId="@item.Id">
+                                <a  asp-controller="RestaurantUsers" asp-action="Index" asp-route-restaurantId="@item.Id">
                                     <button type="button" class="btn btn-secondary btn-sm"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>                                Employees <span class="sr-only">(current)</span></button>
                                 </a>
 
-                                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
-
-                            }
+                                <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info btn-sm">Info</button></a>
+                            </div>
                         }
                     }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                }
+            </div>
+
+        </div>
+
+
+    }
+</div>
+

@@ -42,10 +42,10 @@
 
                             if (User.IsInRole("Admin") || User.IsInRole("Manager"))
                             {
-                                <p>
-                                    <a asp-action="Details" asp-all-route-data="parms">Details</a> |
-                                    <a asp-action="Delete" asp-all-route-data="parms">Leave</a>
-                                </p>
+                                <div class="btn-group-toggle">
+                                    <a asp-action="Details" asp-all-route-data="parms"><button type="button" class="btn btn-info btn-sm">Info</button></a> 
+                                    <a asp-action="Delete" asp-all-route-data="parms"><button type="button" class="btn btn-danger btn-sm">Remove</button></a>
+                                </div>
                             }
                         }
                     }
@@ -55,16 +55,16 @@
 
                             if (User.IsInRole("Host") || User.IsInRole("Waiter"))
                             {
-                                        <p>
-                                            <a asp-action="Details" asp-all-route-data="parms">Details</a>|
+                                        <div class="btn-group">
+                                            <a asp-action="Details" asp-all-route-data="parms"><button type="button" class="btn btn-info btn-sm">Info</button></a>
                                             @{
                                                 if (item.UserId == ViewBag.LoginUser.Id)
                                                 {
-                                                    <a asp-action="Delete" asp-all-route-data="parms">Leave</a>
+                                                    <a asp-action="Delete" asp-all-route-data="parms"><button type="button" class="btn btn-danger btn-sm">Remove</button></a>
 
                                                 }
                                             }
-                                        </p>
+                                        </div>
                             }
                         }
                     }
