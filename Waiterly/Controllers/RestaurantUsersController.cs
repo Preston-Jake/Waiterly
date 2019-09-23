@@ -76,7 +76,7 @@ namespace Waiterly.Controllers
         // GET: RestaurantUsers/Create
         
         [Route("Restaurants/Employees/Create")]
-        [Authorize(Roles = "Admin, Manager")]
+        
         public async Task<IActionResult> Create(int? restaurantId)
         {
             var restaurants = await _context.Restaurants.ToListAsync();
@@ -90,7 +90,7 @@ namespace Waiterly.Controllers
         [Route("Restaurants/Employees/Create")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin, Manager")]
+        
         public async Task<IActionResult> Create([Bind("Id,RestaurantId")] RestaurantUser restaurantUser)
         {
             ModelState.Remove("UserId");
