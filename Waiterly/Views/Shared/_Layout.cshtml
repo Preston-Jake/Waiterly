@@ -6,16 +6,16 @@
     <title>@ViewData["Title"] - Waiterly</title>
 
     <environment include="Development">
-        <link rel="stylesheet" href="~/css/bootstrapStyle.css" />
+        <link rel="stylesheet" href='@Url.Content("~/css/bootstrapStyle.css")' />
     </environment>
     <environment exclude="Development">
-        <link rel="stylesheet" href="~/css/bootstrapStyle.css"
+        <link rel="stylesheet" href='@Url.Content("~/css/bootstrapStyle.css")'
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
               asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute"
               crossorigin="anonymous"
               integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" />
     </environment>
-    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href='@Url.Content("~/css/site.css")' />
     <link href="https://fonts.googleapis.com/css?family=Alegreya+Sans|Open+Sans&display=swap" rel="stylesheet">
 </head>
 <body class="">
